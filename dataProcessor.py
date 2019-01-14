@@ -27,8 +27,7 @@ class dataProcessor():
 		for im in x:
 			im_tmp = np.reshape(im, (3, -1)).transpose()
 			x_tmp.append(np.reshape(im_tmp, (32, 32, 3)))		
-		x = np.array(x_tmp)
-		print(x.shape)
+		x = np.array(x_tmp)		
 		
 		# Shuffle
 		n_data = x.shape[0]

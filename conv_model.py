@@ -7,16 +7,17 @@ from keras import regularizers
 
 class conv_model():
 	# Build model with the given parameters
-	def build_model(conv_neurons, dense_neurons, input_shape, n_class, dropout, regularizer):
+	def build_model(conv_neurons, conv_repeat, dense_neurons, input_shape, n_class, dropout, regularizer):
 		model = Sequential()
 		# Conv2D
 		for idx, neurons in enumerate(conv_neurons):
-			if idx == 0:
-				model.add(Conv2D(neurons, (3,3), padding='same',
-					input_shape=input_shape[1:]))
-			else:
-				model.add(Conv2D(neurons, (3,3), padding='same'))
-			model.add(Activation('relu'))
+			for i in range(conv_repeat):
+				if idx == 0:				
+					model.add(Conv2D(neurons, (3,3), padding='same',
+						input_shape=input_shape[1:]))					
+				else:				
+					model.add(Conv2D(neurons, (3,3), padding='same'))
+				model.add(Activation('relu'))			
 			model.add(MaxPooling2D(pool_size=(2,2)))
 			model.add(Dropout(dropout))
 
