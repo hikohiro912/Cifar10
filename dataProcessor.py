@@ -22,8 +22,13 @@ class dataProcessor():
 		x = d.get(b'data')
 		y = d.get(b'labels')
 		y = np.array(y)
-		# Reshape x
-		x = np.reshape(x, (x.shape[0], 32, 32, 3))
+		# Reshape x		
+		x_tmp = []
+		for im in x:
+			im_tmp = np.reshape(im, (3, -1)).transpose()
+			x_tmp.append(np.reshape(im_tmp, (32, 32, 3)))		
+		x = np.array(x_tmp)
+		print(x.shape)
 		
 		# Shuffle
 		n_data = x.shape[0]
