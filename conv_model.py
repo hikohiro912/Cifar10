@@ -24,15 +24,12 @@ class conv_model():
 		model.add(Flatten())
 
 		# Dense
-		for idx, neurons in enumerate(dense_neurons):
-			if idx == len(dense_neurons) - 1:
-				model.add(Dense(n_class, 
-					kernel_regularizer=regularizers.l2(regularizer)))
-				model.add(Activation('softmax'))
-			else:
-				model.add(Dense(neurons, kernel_regularizer=regularizers.l2(regularizer)))
-				model.add(Activation('relu'))
-				model.add(Dropout(dropout))
+		for idx, neurons in enumerate(dense_neurons):			
+			model.add(Dense(neurons, kernel_regularizer=regularizers.l2(regularizer)))
+			model.add(Activation('relu'))
+			model.add(Dropout(dropout))
+		model.add(Dense(n_class, kernel_regularizer=regularizers.l2(regularizer)))
+		model.add(Activation('softmax'))
 
 		model.summary()
 		return model 

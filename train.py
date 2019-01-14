@@ -11,7 +11,7 @@ train_data_files = ['data/data_batch_1','data/data_batch_2','data/data_batch_3',
 test_data_files = ['data/test_batch']
 # Model
 conv_neurons = [32, 64, 128]
-conv_repeat = 5
+conv_repeat = 3
 dense_neurons = [512]
 dropout = 0.2
 regularizer = 0.01
