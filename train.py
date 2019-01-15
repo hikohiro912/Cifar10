@@ -1,7 +1,9 @@
 from dataProcessor import dataProcessor
 from conv_model import conv_model 
+from resnet_model import resnet_model 
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
+from keras.callbacks import ModelCheckpoint, TensorBoard
 import os
 
 ####### Parameters #######
@@ -12,17 +14,22 @@ train_data_files = ['data/data_batch_1','data/data_batch_2','data/data_batch_3',
 	'data/data_batch_4','data/data_batch_5']
 test_data_files = ['data/test_batch']
 save_dir = os.path.join(os.getcwd(), 'saved_models')
-# Model
+# Conv Model
 conv_neurons = [32, 64, 64]
 conv_repeat = 2
 dense_neurons = [128]
 dropout = 0.2
 regularizer = 0.01
+# Resnet model
+stack_depth = 3
+block_depth = 3
+neurons_0 = 16
 # Training
 lr = 0.0001
 batch_size = 64
-epoch = 5
+epoch = 10
 data_gen = False
+isResnet = True
 
 ####### Data #######
 print('Getting Data...', end='')
@@ -33,12 +40,32 @@ x_test, y_test = test_data_processor.getData(n_class)
 print('Done')
 
 ####### Model #######
-model = conv_model.build_model(conv_neurons, conv_repeat, dense_neurons, x_train.shape, 
-	n_class, dropout, regularizer)
+if isResnet:
+	Resnet_model = resnet_model()
+	model = Resnet_model.build_model(x_train.shape[1:], n_class, stack_depth, block_depth, neurons_0)
+else:
+	model = conv_model.build_model(conv_neurons, conv_repeat, dense_neurons, x_train.shape, 
+		n_class, dropout, regularizer)
+
 opt = Adam(lr=lr)
 model.compile(loss='categorical_crossentropy', 
 	optimizer=opt, metrics=['accuracy'])
 
+# Save model and weights
+if not os.path.isdir(save_dir):
+    os.makedirs(save_dir)
+if isResnet:
+	model_name = 'res_%dx%dx%d.h5' % (stack_depth, block_depth, neurons_0)
+else:
+	model_name = 'conv_%sx%d_%s.h5' % (str(conv_neurons), conv_repeat, str(dense_neurons))
+model_path = os.path.join(save_dir, model_name)
+
+# Callbacks
+checkpoint = ModelCheckpoint(filepath=model_path, monitor='val_acc', verbose=1, save_best_only=True)
+tensorboard = TensorBoard(log_dir='logs/{}'.format(model_name))
+callbacks = [checkpoint, tensorboard]
+
+# Train
 if data_gen:
 	datagen = ImageDataGenerator(
 	        featurewise_center=False,  # set input mean to 0 over the dataset
@@ -70,21 +97,15 @@ if data_gen:
 	        validation_split=0.0)
 	datagen.fit(x_train)
 	history = model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
-		epochs=epoch, validation_data=(x_test, y_test), workers=4)
+		epochs=epoch, validation_data=(x_test, y_test), workers=4, callbacks=callbacks)
 else:
 	history = model.fit(x_train, y_train, batch_size=batch_size,
-		epochs=epoch, validation_data=(x_test, y_test), shuffle=True)
+		epochs=epoch, validation_data=(x_test, y_test), shuffle=True, callbacks=callbacks)
 
-# Score trained model.
+# Score trained model
 scores = model.evaluate(x_test, y_test, verbose=1)
 print('Test loss:', scores[0])
 print('Test accuracy:', scores[1])
 
-# Save model and weights
-if not os.path.isdir(save_dir):
-    os.makedirs(save_dir)
-model_name = '[%3.1f]cifar10-conv-%sx%d-dense-%s.h5' % (scores[1]*100, str(conv_neurons), conv_repeat, str(dense_neurons))
-model_path = os.path.join(save_dir, model_name)
-model.save(model_path)
-print('Saved trained model at %s ' % model_path)
+
 
