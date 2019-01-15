@@ -27,7 +27,7 @@ neurons_0 = 16
 # Training
 lr = 0.0001
 batch_size = 64
-epoch = 10
+epoch = 50
 data_gen = False
 isResnet = True
 
@@ -47,7 +47,7 @@ else:
 	model = conv_model.build_model(conv_neurons, conv_repeat, dense_neurons, x_train.shape, 
 		n_class, dropout, regularizer)
 
-opt = Adam(lr=lr)
+opt = Adam(lr=lr, decay=1e-6)
 model.compile(loss='categorical_crossentropy', 
 	optimizer=opt, metrics=['accuracy'])
 
@@ -107,5 +107,8 @@ scores = model.evaluate(x_test, y_test, verbose=1)
 print('Test loss:', scores[0])
 print('Test accuracy:', scores[1])
 
-
+model_name = '[%3.1f]res_%dx%dx%d.h5' % (scores[1], stack_depth, block_depth, neurons_0)
+model_path = os.path.join(save_dir, model_name)
+model.save(model_path)
+print('Final model saved to %s' % model_path)
 
