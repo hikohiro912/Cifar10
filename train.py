@@ -5,7 +5,8 @@ from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
 from keras.models import load_model
-import os, time 
+import os, time
+import matplotlib.pyplot as plt
 
 ####### Parameters #######
 # General
@@ -115,4 +116,21 @@ model_name = '[{}]{}'.format(scores[1]*100, model_name)
 model_path = os.path.join(save_dir, model_name)
 model.save(model_path)
 print('Final model saved to %s' % model_path)
+
+# Predict 
+class_list = ['airplane','automobile','bird','cat','deer',
+	'dog','frog','horse','ship','truck']
+n_prediction = 5
+for predict in range(n_prediction):
+	# Do prediction
+	rand_index = random.rand(0, x_test.shape[0]-1)
+	x_predict = x_test[rand_index]
+	y_predict = model.predict(x_predict)
+	class_predict = class_list[np.argmax(y_predict)]
+	# Plot the figure with predicted title
+	plt.imshow(x_predict)
+	plt.title(class_predict)
+	plt.show()
+	
+
 
