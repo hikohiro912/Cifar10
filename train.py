@@ -4,6 +4,7 @@ from resnet_model import resnet_model
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
+from keras.models import load_model
 import os, time 
 
 ####### Parameters #######
@@ -101,6 +102,9 @@ if data_gen:
 else:
 	history = model.fit(x_train, y_train, batch_size=batch_size,
 		epochs=epoch, validation_data=(x_test, y_test), shuffle=True, callbacks=callbacks)
+
+# Load best model
+model = load_model(model_path)
 
 # Score trained model
 scores = model.evaluate(x_test, y_test, verbose=1)

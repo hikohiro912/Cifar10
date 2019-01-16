@@ -14,12 +14,15 @@ class conv_model():
 			for i in range(conv_repeat):
 				if idx == 0:				
 					model.add(Conv2D(neurons, (3,3), padding='same',
-						input_shape=input_shape[1:]))					
+						input_shape=input_shape[1:], kernel_regularizer=regularizers.l2(regularizer),
+						kernel_initializer='he_normal'))					
 				else:				
 					if i == 0:
-						model.add(Conv2D(neurons, (3,3), padding='same', strides=2))
+						model.add(Conv2D(neurons, (3,3), padding='same', strides=2, 
+							kernel_regularizer=regularizers.l2(regularizer), kernel_initializer='he_normal'))
 					else:
-						model.add(Conv2D(neurons, (3,3), padding='same'))
+						model.add(Conv2D(neurons, (3,3), padding='same', 
+							kernel_regularizer=regularizers.l2(regularizer), kernel_initializer='he_normal'))
 				model.add(BatchNormalization())
 				model.add(Activation('relu'))							
 		
@@ -29,10 +32,10 @@ class conv_model():
 
 		# Dense
 		for idx, neurons in enumerate(dense_neurons):			
-			model.add(Dense(neurons, kernel_regularizer=regularizers.l2(regularizer)))
+			model.add(Dense(neurons, kernel_regularizer=regularizers.l2(regularizer), kernel_initializer='he_normal'))
 			model.add(Activation('relu'))
 			model.add(Dropout(dropout))
-		model.add(Dense(n_class, kernel_regularizer=regularizers.l2(regularizer)))
+		model.add(Dense(n_class, kernel_regularizer=regularizers.l2(regularizer), kernel_initializer='he_normal'))
 		model.add(Activation('softmax'))
 
 		model.summary()
