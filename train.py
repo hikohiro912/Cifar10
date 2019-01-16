@@ -4,7 +4,7 @@ from resnet_model import resnet_model
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
-import os
+import os, time 
 
 ####### Parameters #######
 # General
@@ -55,9 +55,9 @@ model.compile(loss='categorical_crossentropy',
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 if isResnet:
-	model_name = 'res_%dx%dx%d.h5' % (stack_depth, block_depth, neurons_0)
+	model_name = 'res_{}x{}x{}-{}.h5'.format(stack_depth, block_depth, neurons_0, int(time.time()))
 else:
-	model_name = 'conv_%sx%d_%s.h5' % (str(conv_neurons), conv_repeat, str(dense_neurons))
+	model_name = 'conv_{}x{}_{}-{}.h5'.format(str(conv_neurons), conv_repeat, str(dense_neurons), int(time.time()))
 model_path = os.path.join(save_dir, model_name)
 
 # Callbacks
@@ -107,7 +107,7 @@ scores = model.evaluate(x_test, y_test, verbose=1)
 print('Test loss:', scores[0])
 print('Test accuracy:', scores[1])
 
-model_name = '[%3.1f]res_%dx%dx%d.h5' % (scores[1], stack_depth, block_depth, neurons_0)
+model_name = '[{}]{}'.format(scores[1]*100, model_name)
 model_path = os.path.join(save_dir, model_name)
 model.save(model_path)
 print('Final model saved to %s' % model_path)

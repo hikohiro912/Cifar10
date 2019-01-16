@@ -1,7 +1,7 @@
 import numpy as np 
 import keras
 from keras.layers import Dense, Conv2D, BatchNormalization, Activation
-from keras.layers import AveragePooling2D, Input, Flatten
+from keras.layers import AveragePooling2D, Input, Flatten, Dropout
 from keras.regularizers import l2
 from keras.models import Model
 
@@ -43,6 +43,8 @@ class resnet_model():
 		# Classifier		
 		x = AveragePooling2D(pool_size=int(x.shape[1]))(x)
 		y = Flatten()(x)
+		y = Dense(512, activation='relu',kernel_initializer='he_normal')(y)
+		y = Dropout(0.2)(y)
 		outputs = Dense(n_class, activation='softmax', kernel_initializer='he_normal')(y)
 
 		# Create model
