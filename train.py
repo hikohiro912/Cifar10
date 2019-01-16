@@ -16,7 +16,7 @@ test_data_files = ['data/test_batch']
 save_dir = os.path.join(os.getcwd(), 'saved_models')
 # Conv Model
 conv_neurons = [32, 64, 128]
-conv_repeat = 3
+conv_repeat = 2
 dense_neurons = [128]
 dropout = 0.2
 regularizer = 0.01
@@ -26,8 +26,8 @@ block_depth = 3
 neurons_0 = 16
 # Training
 lr = 0.0001
-batch_size = 64
-epoch = 50
+batch_size = 32
+epoch = 20
 data_gen = False
 isResnet = False
 
