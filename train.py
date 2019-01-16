@@ -19,7 +19,7 @@ save_dir = os.path.join(os.getcwd(), 'saved_models')
 # Conv Model
 conv_neurons = [32, 64, 128]
 conv_repeat = 2
-dense_neurons = [512]
+dense_neurons = [256]
 dropout = 0.2
 regularizer = 0.01
 # Resnet model

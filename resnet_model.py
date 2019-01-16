@@ -43,7 +43,7 @@ class resnet_model():
 		# Classifier		
 		x = AveragePooling2D(pool_size=int(x.shape[1]))(x)
 		y = Flatten()(x)
-		y = Dense(512, activation='relu',kernel_initializer='he_normal')(y)
+		y = Dense(256, activation='relu',kernel_initializer='he_normal')(y)
 		y = Dropout(0.2)(y)
 		outputs = Dense(n_class, activation='softmax', kernel_initializer='he_normal')(y)
 
