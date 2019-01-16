@@ -1,5 +1,5 @@
 from dataProcessor import dataProcessor
-from conv_model import conv_model 
+from simple_conv_model import conv_model 
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
@@ -22,7 +22,7 @@ dense_neurons = [256]
 dropout = 0.2
 regularizer = 0.01
 # Training
-lr = 1e-3
+lr = 1e-4
 batch_size = 32
 epoch = 20
 data_gen = False
@@ -99,13 +99,13 @@ for n in conv_repeat:
 
 	# Score trained model
 	train_scores = model.evaluate(x_train, y_train, verbose=1)
-	print('Train loss:', scores[0])
-	print('Train accuracy:', scores[1])
+	print('Train loss:', train_scores[0])
+	print('Train accuracy:', train_scores[1])
 	test_scores = model.evaluate(x_test, y_test, verbose=1)
-	print('Test loss:', scores[0])
-	print('Test accuracy:', scores[1])
+	print('Test loss:', test_scores[0])
+	print('Test accuracy:', test_scores[1])
 
-	model_name = '[{}][{}]{}'.format(train_scores[1]*100, test_scores[1]*100, model_name)
+	model_name = '[%3.2f][%3.2f]%s' % (train_scores[1]*100, test_scores[1]*100, model_name)
 	model_path = os.path.join(save_dir, model_name)
 	model.save(model_path)
 	print('Final model saved to %s' % model_path)

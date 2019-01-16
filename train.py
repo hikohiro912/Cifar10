@@ -108,11 +108,14 @@ else:
 model = load_model(model_path)
 
 # Score trained model
-scores = model.evaluate(x_test, y_test, verbose=1)
-print('Test loss:', scores[0])
-print('Test accuracy:', scores[1])
+train_scores = model.evaluate(x_train, y_train, verbose=1)
+print('Train loss:', train_scores[0])
+print('Train accuracy:', train_scores[1])
+test_scores = model.evaluate(x_test, y_test, verbose=1)
+print('Test loss:', test_scores[0])
+print('Test accuracy:', test_scores[1])
 
-model_name = '[{}]{}'.format(scores[1]*100, model_name)
+model_name = '[%3.2f][%3.2f]%s' % (train_scores[1]*100, test_scores[1]*100, model_name)
 model_path = os.path.join(save_dir, model_name)
 model.save(model_path)
 print('Final model saved to %s' % model_path)
