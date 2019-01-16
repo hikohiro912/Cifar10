@@ -1,6 +1,6 @@
 import numpy as np 
 import keras
-from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D, BatchNormalization
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.models import Sequential
 from keras import regularizers
@@ -17,10 +17,10 @@ class conv_model():
 						input_shape=input_shape[1:]))					
 				else:				
 					model.add(Conv2D(neurons, (3,3), padding='same'))
-				model.add(Activation('relu'))			
-			model.add(MaxPooling2D(pool_size=(2,2)))
-			model.add(Dropout(dropout))
-
+				model.add(BatchNormalization())
+				model.add(Activation('relu'))							
+		
+		model.add(AveragePooling2D(pool_size=int(input_shape[1])))
 		model.add(Flatten())
 
 		# Dense

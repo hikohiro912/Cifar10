@@ -9,7 +9,7 @@ class resnet_model():
 	# Conv-BN-Relu-Layer
 	def resnet_layer(self, inputs, neurons, kernel_size=3, strides=1, batch=True, activation='relu'):
 		conv = Conv2D(neurons, kernel_size=kernel_size, strides=strides, padding='same',
-			kernel_initializer='he_normal', kernel_regularizer=l2(1e-4))
+			kernel_initializer='he_normal', kernel_regularizer=l2(1e-2))
 		x = inputs
 		x = conv(x)
 		if batch:
