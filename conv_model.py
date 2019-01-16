@@ -16,11 +16,15 @@ class conv_model():
 					model.add(Conv2D(neurons, (3,3), padding='same',
 						input_shape=input_shape[1:]))					
 				else:				
-					model.add(Conv2D(neurons, (3,3), padding='same'))
+					if i == 0:
+						model.add(Conv2D(neurons, (3,3), padding='same', strides=2))
+					else:
+						model.add(Conv2D(neurons, (3,3), padding='same'))
 				model.add(BatchNormalization())
 				model.add(Activation('relu'))							
 		
-		model.add(AveragePooling2D(pool_size=int(input_shape[1])))
+		pool_size = input_shape[1]/(2**(len(conv_neurons)-1))
+		model.add(AveragePooling2D(pool_size=int(pool_size)))
 		model.add(Flatten())
 
 		# Dense
