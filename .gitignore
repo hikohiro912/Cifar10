@@ -1,5 +1,2 @@
 *.pyc
-*.TOM
-saved_models
-*.h5
 logs

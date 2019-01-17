@@ -23,8 +23,6 @@ class conv_model():
 			model.add(MaxPooling2D(pool_size=2))
 			model.add(Dropout(dropout))				
 		
-		pool_size = input_shape[1]/2**len(conv_neurons)
-		model.add(AveragePooling2D(pool_size=int(pool_size)))
 		model.add(Flatten())
 
 		# Dense
