@@ -5,7 +5,7 @@ from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
 from keras.models import load_model
-import os, time
+import os, time, random
 import matplotlib.pyplot as plt
 
 ####### Parameters #######
@@ -25,13 +25,13 @@ regularizer = 0.01
 # Resnet model
 stack_depth = 3
 block_depth = 3
-neurons_0 = 16
+neurons_0 = 32
 # Training
 lr = 0.0001
 batch_size = 32
 epoch = 20
 data_gen = False
-isResnet = False
+isResnet = True
 
 ####### Data #######
 print('Getting Data...', end='')
