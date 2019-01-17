@@ -1,5 +1,5 @@
 from dataProcessor import dataProcessor
-from simple_conv_model import conv_model 
+from conv_model import conv_model 
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, TensorBoard
