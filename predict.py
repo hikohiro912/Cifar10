@@ -14,11 +14,13 @@ save_dir = os.path.join(os.getcwd(), 'saved_models')
 # Model 
 model_name = '[97.01][80.80]res_5x3x16-1547728560.h5'
 model_path = os.path.join(save_dir, model_name)
+print('Loading model...', end='')
 model = load_model(model_path)
+print('Done')
 
 ####### Data #######
 batch_size = 32
-print('Getting Data...', end='')
+print('Getting data...', end='')
 data_processor = dataProcessor(data_files)
 x, y = data_processor.getData(n_class)
 print('Done')
@@ -35,7 +37,7 @@ for predict in range(n_prediction):
 	class_predict = class_list[np.argmax(y_predict[0])]
 	# Plot the figure with predicted title
 	plt.imshow(x_predict[0])
-	plt.title(class_predict)
+	plt.title(str(predict+1) + ':  ' + class_predict)
 	plt.show()
 	
 
