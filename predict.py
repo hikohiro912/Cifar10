@@ -8,9 +8,8 @@ import numpy as np
 # General
 n_class = 10
 # Files
-train_data_files = ['data/data_batch_1','data/data_batch_2','data/data_batch_3',
-	'data/data_batch_4','data/data_batch_5']
-test_data_files = ['data/test_batch']
+data_files = ['data/data_batch_1','data/data_batch_2','data/data_batch_3',
+	'data/data_batch_4','data/data_batch_5', 'data/test_batch']
 save_dir = os.path.join(os.getcwd(), 'saved_models')
 # Model 
 model_name = '[97.01][80.80]res_5x3x16-1547728560.h5'
@@ -20,10 +19,8 @@ model = load_model(model_path)
 ####### Data #######
 batch_size = 32
 print('Getting Data...', end='')
-train_data_processor = dataProcessor(train_data_files)
-x_train, y_train = train_data_processor.getData(n_class)
-test_data_processor = dataProcessor(test_data_files)
-x_test, y_test = test_data_processor.getData(n_class)
+data_processor = dataProcessor(data_files)
+x, y = data_processor.getData(n_class)
 print('Done')
 
 ####### Predict #######
@@ -32,8 +29,8 @@ class_list = ['airplane','automobile','bird','cat','deer',
 n_prediction = 10
 for predict in range(n_prediction):
 	# Do prediction
-	rand_index = random.randint(0, x_train.shape[0]-1)
-	x_predict = np.array([list(x_train[rand_index])]*batch_size)
+	rand_index = random.randint(0, x.shape[0]-1)
+	x_predict = np.array([list(x[rand_index])]*batch_size)
 	y_predict = model.predict(x_predict, batch_size=batch_size)
 	class_predict = class_list[np.argmax(y_predict[0])]
 	# Plot the figure with predicted title
